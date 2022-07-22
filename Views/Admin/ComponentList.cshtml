@@ -18,7 +18,11 @@
                 <tr>
                     <th scope="row">1</th>
                     <td>@item</td>
-                    <td>Installa/Disinstalla</td>
+                    <td>
+                        <a asp-controller="Admin" asp-action="InstallComponent" asp-route="@item">Installa</a>
+                        <a asp-controller="Admin" asp-action="UninstallComponent" asp-route="@item">Disinstalla</a>
+
+                    </td>
                 </tr>
             }
     </tbody>

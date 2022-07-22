@@ -9,6 +9,11 @@ namespace CSM_NET.Models
         public string Name { get; set; }
 
         //relazioni
-        public List<Component> Components { get; set; }
+        public List<Component>? Components { get; set; }
+
+        public Page()
+        {
+
+        }
     }
 }

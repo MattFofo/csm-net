@@ -28,6 +28,16 @@ namespace CSM_NET.Controllers
             return View();
         }
 
+        public ActionResult InstallComponent(string name)
+        {
+            return View();
+        }
+
+        public ActionResult UninstallComponent(string name)
+        {
+            return View();
+        }
+
 
         public ActionResult Index()
         {
