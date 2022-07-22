@@ -7,12 +7,18 @@ namespace CSM_NET.Models
     {
         [Key]
         public int Id { get; set; }
-
+        public string Name { get; set; }
+        public string Value { get; set; }
 
         //relazioni
         [ForeignKey("ComponentId")]
-        public int ComponentId { get; set; }
-        public Component Component { get; set; }
+        public int? ComponentId { get; set; }
+        public Component? Component { get; set; }
+
+        public Field(string name)
+        {
+            Name = name;
+        }
 
     }
 }

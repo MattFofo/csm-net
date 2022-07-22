@@ -1,0 +1,26 @@
+﻿@{
+    List<string> dirs = ViewData["dirs"] as List<String>;
+}
+
+<h1>Lista Componenti Installabili</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (string item in dirs)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td>@item</td>
+                    <td>Installa/Disinstalla</td>
+                </tr>
+            }
+    </tbody>
+</table>
+
