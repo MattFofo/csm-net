@@ -47,7 +47,17 @@ namespace CSM_NET.Controllers
 
         public ActionResult UninstallComponent(string name)
         {
-            return View();
+            using (CMSContext ctx = new CMSContext())
+            {
+                ComponentDefinition componentDefinition = ctx.componentDefinitions.Find(name);
+
+                if (componentDefinition == null) return NotFound();
+
+                ctx.componentDefinitions.Remove(componentDefinition);
+                ctx.SaveChanges();
+
+                return RedirectToAction("ComponentList");
+            }
         }
 
 
