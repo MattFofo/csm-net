@@ -1,6 +1,7 @@
 ﻿using CSM_NET.Db_context;
 using CSM_NET.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CSM_NET.Controllers
@@ -48,6 +49,35 @@ namespace CSM_NET.Controllers
             return RedirectToAction(nameof(Index));
            
         }
+
+
+        public ActionResult Edit(int id)
+        {
+            using(CMSContext ctx = new CMSContext())
+            {
+                Page page = ctx.pages.Where(p => p.Id == id).Include(page => page.Components).FirstOrDefault();
+
+                if (page == null) return NotFound();
+
+                return View(page);
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

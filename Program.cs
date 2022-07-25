@@ -1,7 +1,23 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using CSM_NET.Db_context;
+
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("CMSContextConnection") ?? throw new InvalidOperationException("Connection string 'CMSContextConnection' not found.");
+
+builder.Services.AddDbContext<CMSContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CMSContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
+//builder.Services.AddHealthChecks();
+
+//builder.Services.AddMvc();
 
 var app = builder.Build();
 
@@ -18,10 +34,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Page}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

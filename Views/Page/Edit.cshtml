@@ -1,0 +1,59 @@
+﻿@model CSM_NET.Models.Page
+
+<h4>Page</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <h3>Lista componenti</h3>
+
+            @if (@Model.Components == null || @Model.Components.Count == 0)
+            {
+                <h4>Non ci sono componenti installati</h4>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Component comp in @Model.Components)
+                            {
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>@comp.ComponentDefinitionKey</td>
+                                    <td>
+                                        rimuovi
+                                    </td>
+                                </tr>
+                            }
+                    </tbody>
+                </table>                
+            }
+            <a asp-controller="Component" asp-action="Select">Aggiungi un componente</a>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

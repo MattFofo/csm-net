@@ -1,16 +1,19 @@
-﻿using CSM_NET.Db_context;
-using CSM_NET.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using CSM_NET.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSM_NET.Controllers
 {
-    [Authorize]
-    public class AdminController : Controller
+    public class ComponentController : Controller
     {
-        
-        public ActionResult ComponentList()
+        // GET: HomeController
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+
+        public ActionResult Select(int pageId)
         {
             string rootPath = @"Views\Page\Component";
 
@@ -19,58 +22,44 @@ namespace CSM_NET.Controllers
 
             List<string> dirsNames = new List<string>();
 
+            List<ComponentDefinition> componentDefinitionsList = new List<ComponentDefinition>(); //TODO: prima aggiungere ComponentDefinition al DB nel admincontroller e poi prendere la lista dal db
+
+            //new COmponentdefinition??? 
+
             foreach (var item in dirs)
             {
                 string name = new DirectoryInfo(item).Name;
 
+                ComponentDefinition componentDefinition = new ComponentDefinition(name);
+
+                componentDefinitionsList.Add(componentDefinition);
+
                 dirsNames.Add(name);
             }
 
+            ViewData["pageId"] = pageId;
+            ViewData["componentDefinitionsList"] = componentDefinitionsList;
 
-            ViewData["dirs"] = dirsNames;
-            
-            return View();
-        }
-
-        public ActionResult InstallComponent(string name)
-        {
-            using (CMSContext ctx = new CMSContext())
-            {
-                ComponentDefinition componentDefinition = new ComponentDefinition(name);
-
-                ctx.componentDefinitions.Add(componentDefinition);
-                ctx.SaveChanges();
-
-                return RedirectToAction("ComponentList");
-            }
-        }
-
-        public ActionResult UninstallComponent(string name)
-        {
             return View();
         }
 
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
+        // GET: HomeController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-
+        // GET: HomeController/Create
         public ActionResult Create()
         {
             return View();
         }
 
+        // POST: HomeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(string key, int pageId)
         {
             try
             {
@@ -82,13 +71,13 @@ namespace CSM_NET.Controllers
             }
         }
 
-
+        // GET: HomeController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-
+        // POST: HomeController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -103,12 +92,13 @@ namespace CSM_NET.Controllers
             }
         }
 
+        // GET: HomeController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-
+        // POST: HomeController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
