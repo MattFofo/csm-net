@@ -42,7 +42,8 @@
                     </tbody>
                 </table>                
             }
-            <a asp-controller="Component" asp-action="Select">Aggiungi un componente</a>
+            <a href="@Url.Action("Select", "Component", new { Id = @Model.Id })">Aggiungi un componente</a>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

@@ -1,4 +1,5 @@
-﻿using CSM_NET.Models;
+﻿using CSM_NET.Db_context;
+using CSM_NET.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,34 +14,44 @@ namespace CSM_NET.Controllers
         }
 
 
-        public ActionResult Select(int pageId)
+        public ActionResult Select(int Id)
         {
-            string rootPath = @"Views\Page\Component";
 
-            //TODO: gestire exeption mancanza dir
-            List<string> dirs = Directory.GetDirectories(rootPath, "*", SearchOption.AllDirectories).ToList();
-
-            List<string> dirsNames = new List<string>();
-
-            List<ComponentDefinition> componentDefinitionsList = new List<ComponentDefinition>(); //TODO: prima aggiungere ComponentDefinition al DB nel admincontroller e poi prendere la lista dal db
-
-            //new COmponentdefinition??? 
-
-            foreach (var item in dirs)
+            using(CMSContext ctx = new CMSContext())
             {
-                string name = new DirectoryInfo(item).Name;
+                List<ComponentDefinition> componentDefinitionsList = ctx.componentDefinitions.ToList();
 
-                ComponentDefinition componentDefinition = new ComponentDefinition(name);
 
-                componentDefinitionsList.Add(componentDefinition);
+                ViewData["pageId"] = Id;
 
-                dirsNames.Add(name);
+                return View(componentDefinitionsList);
             }
 
-            ViewData["pageId"] = pageId;
-            ViewData["componentDefinitionsList"] = componentDefinitionsList;
+        }
 
-            return View();
+        public ActionResult AddComponent(int pageId, string name)
+        {
+            using (CMSContext ctx = new CMSContext())
+            {
+                Page page = ctx.pages.Find(pageId);
+                if (page == null) return NotFound();
+
+                ComponentDefinition componentDefinition = ctx.componentDefinitions.Find(name);
+                if (componentDefinition == null) return NotFound();
+
+                Component component = new Component()
+                {
+                    ComponentDefinition = componentDefinition,
+                    ComponentDefinitionKey = name,
+                    PageId = pageId
+                };
+
+
+                page.Components.Add(component); //errore??
+
+
+                return RedirectToAction("Select");
+            }
         }
 
 
